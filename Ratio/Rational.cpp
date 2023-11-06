@@ -3,6 +3,8 @@
 //
 
 #include "Rational.h"
+#include "Natural.h"
+#include "Integer.h"
 Rational::Rational(Integer &num, Natural &denum)
 {
     this->numerator = new Integer(num);
@@ -53,29 +55,66 @@ Rational::~Rational()
 }
 
 Rational &Rational::RED_Q_Q() const {
-    //return <#initializer#>;
+    Natural GCF = this->denumerator->GCF_NN_N(this->numerator->ABS_Z_Z());
+
+    Rational* RED = new Rational(this->numerator->DIV_ZZ_Z(GCF),this->denumerator->DIV_NN_N(GCF));
+    return *RED;
 }
 
-bool Rational::INT_Q_B() {
-    return false;
+bool Rational::INT_Q_B() const {
+    if(this->RED_Q_Q().denumerator->COM_NN_D(Natural("1"))==0)
+        return true;
+    else
+        return false;
 }
+
 
 Integer &Rational::TRANS_Q_Z() const {
-    //return <#initializer#>;
+    Integer* TRANS = new Integer(*(this->RED_Q_Q().numerator));
+    return *TRANS;
 }
 
-Rational &Rational::ADD_QQ_Q(const Rational &) const {
-    //return <#initializer#>;
+Rational &Rational::ADD_QQ_Q(const Rational &other) const {
+    Natural Denum = this->denumerator->LCM_NN_N(*(other.get_DENUM()));
+
+    //Числитель высчитаем как сумму числителя первого умноженного на дополнительный множитель
+    //и втогоро числителя на дополнительный множитель
+    Integer Num = this->numerator->MUL_ZZ_Z(Integer(Denum.DIV_NN_N(*(this->denumerator))));
+    Num = Num.ADD_ZZ_Z(other.get_NUM()->MUL_ZZ_Z(Integer(Denum.DIV_NN_N(*(other.get_DENUM())))));
+
+    //Сократим результат
+    Rational *SUM = new Rational(Rational(Num,Denum).RED_Q_Q());
+
+    return *SUM;
 }
 
-Rational &Rational::SUB_QQ_Q(const Rational &) const {
-    //return <#initializer#>;
+Rational &Rational::SUB_QQ_Q(const Rational &other) const {
+    Rational Opposite = Rational(other.get_NUM()->MUL_ZM_Z(),*(other.get_DENUM()));
+    Rational* SUB = new Rational(this->ADD_QQ_Q(Opposite));
+
+    return *SUB;
 }
 
-Rational &Rational::MUL_QQ_Q(const Rational &) const {
-    //return <#initializer#>;
+Rational &Rational::MUL_QQ_Q(const Rational &other) const {
+    Integer NUM = this->numerator->MUL_ZZ_Z(*(other.get_NUM()));
+
+    Natural DENUM = this->denumerator->MUL_NN_N(*(other.get_DENUM()));
+
+    //Сокращаем результат
+    Rational* MUL = new Rational(Rational(NUM,DENUM).RED_Q_Q());
+
+    return *MUL;
 }
 
-Rational &Rational::DIV_QQ_Q(const Rational &) const {
-    //
+Rational &Rational::DIV_QQ_Q(const Rational &other) const {
+    Integer NUM = Integer(*other.get_DENUM());
+    Natural DENUM = other.get_NUM()->TRANS_Z_N();
+
+    if(other.get_NUM()->POZ_Z_D()==1)
+        NUM = NUM.MUL_ZM_Z();
+
+
+    Rational* DIV = new Rational(this->MUL_QQ_Q(Rational(NUM,DENUM)));
+
+    return *DIV;
 }
