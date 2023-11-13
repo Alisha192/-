@@ -233,8 +233,28 @@ Natural& Natural::DIV_NN_N(const Natural& natural) const {
     return quotient;
 }
 
-Natural &Natural::MOD_NN_N(const Natural &) const {
-    //return <#initializer#>;
+//Created by Grebennikov_Dmitry
+//06.11.2023
+
+Natural& Natural::MOD_NN_N(const Natural& natural) const {
+    // Проверка делителя на равенство 0
+    if (natural.NZER_N_B()) {
+        // Можно выбрать другую стратегию обработки ошибок в зависимости от требований
+        // В данном случае возвращаем исходный объект без изменений
+        return *this;
+    }
+
+    // Вычисляем частное от деления
+    Natural quotient = this->DIV_NN_N(natural);
+
+    // Вычитаем из исходного числа произведение делителя на частное
+    Natural product = natural;
+    product.MUL_NN_N(quotient);
+    
+    // Остаток от деления
+    this->SUB_NDN_N(product, 0);
+
+    return *this;
 }
 
 Natural &Natural::GCF_NN_N(const Natural &) const {
