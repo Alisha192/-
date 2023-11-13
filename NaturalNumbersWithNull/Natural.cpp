@@ -142,15 +142,76 @@ Natural& Natural::ADD_NN_N(const Natural& other) {
     return *this;
 }
 
-Natural &Natural::SUB_NDN_N(const Natural &, int) const {
-
-}
-
-//Created by Ismailov_Maksim
+//Created by Berezin_Dmitry
 //06.11.2023
 
-Natural &Natural::SUB_NN_N(const Natural & other) {
-    
+Natural& Natural::SUB_NDN_N(const Natural& other, int digit) {
+    // Создадим копию второго числа
+    Natural product(other);
+
+    // Умножим копию второго числа на данную цифру
+    product.MUL_ND_N(digit);
+
+    // Выполним вычитание из первого числа умноженного второго числа
+    SUB_NN_N(product);
+
+    return *this;
+}
+
+//Created by Berezin_Dmitry
+//13.11.2023
+
+Natural &Natural::SUB_NN_N(const Natural &other) {
+    int comparison = COM_NN_D(other);
+    int n = this->get_n();
+    int m = other.get_n();
+    if (comparison == 2){
+      // Создадим временный объект, который будет хранить результат
+      Natural result(*this);
+
+      int borrow = 0;
+
+      // Убедимся, что this имеет достаточное количество разрядов для хранения разности
+      if (n < m) {
+          n = m;
+          result.Arr = (int*)realloc(result.Arr, sizeof(int) * n);
+      }
+
+      for (int i = 0; i < n; i++) {
+          int diff = result.get_Arr_by_index(i) - borrow;
+
+          if (i < m) {
+              diff -= other.get_Arr_by_index(i);
+          }
+
+          if (diff < 0) {
+              diff += 10;  // В случае отрицательного результата, добавляем 10
+              borrow = 1;
+          } else {
+              borrow = 0; // В противном случае заем равен 0
+          }
+
+          result.set_Arr_by_index(i, diff);
+      }
+
+      // Удаляем ведущие нули из результата
+      while (n > 1 && result.get_Arr_by_index(n - 1) == 0) {
+          n--;
+      }
+
+      result.n = n;
+      result.Arr = (int*)realloc(result.Arr, sizeof(int) * n);
+
+      // Копируем результат в текущий объект
+      *this = result;
+    }
+
+    else if(comparison == 0){
+      this->n = 1;
+      this->Arr[0] = 0;
+    }
+
+    return *this;
 }
 
 //Created by Ismailov_Maksim
