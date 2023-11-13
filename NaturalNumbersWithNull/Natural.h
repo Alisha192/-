@@ -20,21 +20,21 @@ public:
 
     Natural & operator=(const Natural&);//Перегрузка оператора присваивания
 
-    static int COM_NN_D(const Natural &) ;//Сравнение двух натуральных 2 - если первое больше второго, 0, если равны, 1 иначе
+    int COM_NN_D(const Natural &) ;//Сравнение двух натуральных 2 - если первое больше второго, 0, если равны, 1 иначе
 
-    static bool NZER_N_B() ;//Проверка числа на 0
+    bool NZER_N_B() ;//Проверка числа на 0
 
     Natural & ADD_1N_N();//Добавление единицы к натуральному числу
 
-    Natural & ADD_NN_N(const Natural &) const;//Сложение натуральных чисел
+    Natural & ADD_NN_N(const Natural &);//Сложение натуральных чисел
 
     Natural & SUB_NDN_N(const Natural&,int) const;//Вычитание из натурального другого натурального, умноженного на цифру
 
-    Natural & SUB_NN_N(const Natural &) const;//Вычитание из первого большего второго меньшего
+    Natural & SUB_NN_N(const Natural &);//Вычитание из первого большего второго меньшего
 
-    Natural & MUL_ND_N(int) const;//Умножение натурального на цифру
+    Natural & MUL_ND_N(int);//Умножение натурального на цифру
 
-    Natural & MUL_Nk_N(int) const;//Умножение натуралного на 10^k
+    Natural & MUL_Nk_N(int);//Умножение натуралного на 10^k
 
     Natural & MUL_NN_N(const Natural &) const;//Умножение натуральных чисел
 
@@ -50,6 +50,8 @@ public:
 
     [[nodiscard]] int get_n() const{return this->n;};//Получить номер старшего разряда
     [[nodiscard]] int* get_Arr() const {return this->Arr;};//Получить указатель на первый элемент массива разрядов
+    int get_Arr_by_index(int index) const ;
+    void set_Arr_by_index(int index, int value);
 
     ~Natural();//Деструктор
 };
