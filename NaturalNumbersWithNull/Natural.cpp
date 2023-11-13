@@ -203,8 +203,34 @@ int Natural::DIV_NN_Dk(const Natural &, int) {
     return 0;
 }
 
-Natural &Natural::DIV_NN_N(const Natural &) const {
-    //return <#initializer#>;
+//Created by Grebennikov_Dmitry
+//06.11.2023
+ 
+Natural& Natural::DIV_NN_N(const Natural& natural) const {
+    // Проверка делителя на равенство 0
+    if (natural.NZER_N_B()) {
+        // В данном случае возвращаем исходный объект без изменений
+        return *this;
+    }
+ 
+    Natural quotient;  // Неполное частное
+    Natural remainder = *this;  // Остаток
+ 
+    while (COM_NN_D(remainder) != 1) {
+        // Вычисляем первую цифру от деления (DIV_NN_Dk возвращает пару: частное и остаток)
+        int firstDigit = DIV_NN_Dk(remainder, natural.get_Arr_by_index(natural.get_n() - 1));
+ 
+        // Добавляем цифру к неполному частному
+        quotient.ADD_NN_N(Natural(&firstDigit, 1));
+ 
+        // Вычитаем из остатка умноженное на цифру делителя
+        remainder.SUB_NDN_N(natural, firstDigit);
+    }
+ 
+    // quotient содержит неполное частное
+    // remainder содержит остаток
+ 
+    return quotient;
 }
 
 Natural &Natural::MOD_NN_N(const Natural &) const {
