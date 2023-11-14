@@ -9,29 +9,35 @@ from PyQt6.QtGui import QPalette
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("My App")
-        self.setFixedSize(QSize(300, 200))
+        self.setWindowTitle("Коллоквиум ДМиТИ")
+        self.setFixedSize(QSize(300, 220))
         self.setStyleSheet('background-color: #FDBBE7;')
         self.degree_of_polinom = 0
         self.polinom = Polinom(0)
         self.Menu()
 
     def Menu(self):
+        self.name = QLabel("Калькулятор различных типов данных", self)
+        self.name.resize(240, 30)
+        self.name.move(40, 10)
+        self.font = self.name.font()
+        self.font.setBold(True)
+        self.name.setFont(self.font)
         self.nat_num_but = QPushButton("Натуральные числа", self)
         self.nat_num_but.resize(240, 30)
-        self.nat_num_but.move(30, 30)
+        self.nat_num_but.move(30, 50)
         self.nat_num_but.clicked.connect(self.nature_block)
         self.int_num_but = QPushButton("Целые числа", self)
         self.int_num_but.resize(240, 30)
-        self.int_num_but.move(30, 70)
+        self.int_num_but.move(30, 90)
         self.int_num_but.clicked.connect(self.integer_block)
         self.rat_num_but = QPushButton("Рациональные числа", self)
         self.rat_num_but.resize(240, 30)
-        self.rat_num_but.move(30, 110)
+        self.rat_num_but.move(30, 130)
         self.rat_num_but.clicked.connect(self.ration_block)
         self.polinom_but = QPushButton("Многочлены", self)
         self.polinom_but.resize(240, 30)
-        self.polinom_but.move(30, 150)
+        self.polinom_but.move(30, 170)
         self.polinom_but.clicked.connect(self.polinom_block)
 
     def nature_block(self):
@@ -68,6 +74,14 @@ class Natural_numbers(QWidget):
         self.setWindowTitle("Natural numbers")
         self.setFixedSize(QSize(800, 400))
         self.setStyleSheet('background-color: #B4DAF6;')
+        self.labels = ['Сравнение натуральных чисел', 'Проверка на ноль', 'Добавление единицы', 'Сложение двух чисел',
+                  'Вычитание двух чисел', 'Умножение на цифру', 'Умножение на 10^k', 'Умножение',
+                  'Вычитание с умножением на цифру', 'Вычисление первой цифры', 'Неполное частное',
+                  'Остаток от деления', 'НОД', 'НОК']
+        self.label = QLabel(self.labels[0])
+        self.font = self.label.font()
+        self.font.setBold(True)
+        self.label.setFont(self.font)
         self.operations_with_natural_num = QListWidget()
         self.operations_with_natural_num.insertItem(0, 'Сравнение натуральных чисел')
         self.operations_with_natural_num.insertItem(1, 'Проверка на ноль')
@@ -130,9 +144,10 @@ class Natural_numbers(QWidget):
         self.Stack.addWidget(self.NOD)
         self.Stack.addWidget(self.NOK)
 
-        hbox = QHBoxLayout(self)
-        hbox.addWidget(self.operations_with_natural_num)
-        hbox.addWidget(self.Stack)
+        hbox = QGridLayout(self)
+        hbox.addWidget(self.label, 0, 0)
+        hbox.addWidget(self.operations_with_natural_num, 1, 0)
+        hbox.addWidget(self.Stack, 1, 1)
 
         self.setLayout(hbox)
         self.operations_with_natural_num.currentRowChanged.connect(self.display)
@@ -250,7 +265,8 @@ class Natural_numbers(QWidget):
         if (not(self.num1_9.text().isdigit()) or not (self.num2_9.text().isdigit())):
             self.answer_9.setText('Введите корректные значения')
             return
-        if self.num2_9.text().isdigit() and (int(self.num2_9.text()) < 0 or int(self.num2_9.text()) >= len(self.num1_9.text())):
+        if self.num2_9.text().isdigit() and (int(self.num2_9.text()) < 0 or\
+                                             int(self.num2_9.text()) >= len(self.num1_9.text())):
             self.answer_9.setText('Введите корректное значение позиции цифры')
             return
         self.answer_9.setText(answer)
@@ -481,6 +497,7 @@ class Natural_numbers(QWidget):
 
     def display(self, i):
         self.Stack.setCurrentIndex(i)
+        self.label.setText(self.labels[self.Stack.currentIndex()])
 
 
 class Integer_numbers(QWidget):
@@ -500,6 +517,13 @@ class Integer_numbers(QWidget):
         self.operations_with_integer_num.insertItem(7, 'Умножение')
         self.operations_with_integer_num.insertItem(8, 'Частное от деления')
         self.operations_with_integer_num.insertItem(9, 'Остаток от деления')
+        self.labels = ['Абсолютная величина числа', 'Число относительно нуля', 'Умножение на -1',
+                       'Преобразование из натурального в целое', 'Преобразование из целого в натуральное',
+                       'Сложение двух чисел', 'Вычитание двух чисел','Умножение', 'Частное от деления', 'Остаток от деления']
+        self.label = QLabel(self.labels[0])
+        self.font = self.label.font()
+        self.font.setBold(True)
+        self.label.setFont(self.font)
 
         self.absolute_value = QWidget()
         self.positivity = QWidget()
@@ -535,9 +559,10 @@ class Integer_numbers(QWidget):
         self.Stack.addWidget(self.quotient_of_division)
         self.Stack.addWidget(self.remainder_of_division)
 
-        hbox = QHBoxLayout(self)
-        hbox.addWidget(self.operations_with_integer_num)
-        hbox.addWidget(self.Stack)
+        hbox = QGridLayout(self)
+        hbox.addWidget(self.label, 0, 0)
+        hbox.addWidget(self.operations_with_integer_num, 1, 0)
+        hbox.addWidget(self.Stack, 1, 1)
 
         self.setLayout(hbox)
         self.operations_with_integer_num.currentRowChanged.connect(self.display)
@@ -599,7 +624,8 @@ class Integer_numbers(QWidget):
         if self.num1_4.text() == '':
             self.answer_4.setText('Введите значение')
             return
-        if not(''.join(self.num1_4.text().split('-')).isdigit()) or (''.join(self.num1_4.text().split('-')).isdigit() and int(self.num1_4.text()) < 0):
+        if not(''.join(self.num1_4.text().split('-')).isdigit()) or\
+                (''.join(self.num1_4.text().split('-')).isdigit() and int(self.num1_4.text()) < 0):
             self.answer_4.setText('Введите корректное значение')
             return
         self.answer_4.setText(answer)
@@ -609,7 +635,8 @@ class Integer_numbers(QWidget):
         if self.num1_5.text() == '' or self.num2_5.text() == '':
             self.answer_5.setText('Введите все значения')
             return
-        if not(''.join(self.num1_5.text().split('-')).isdigit()) or not(''.join(self.num2_5.text().split('-')).isdigit()):
+        if not(''.join(self.num1_5.text().split('-')).isdigit()) or\
+                not(''.join(self.num2_5.text().split('-')).isdigit()):
             self.answer_5.setText('Введите корректные значения')
             return
         self.answer_5.setText(answer)
@@ -619,7 +646,8 @@ class Integer_numbers(QWidget):
         if self.num1_6.text() == '' or self.num2_6.text() == '':
             self.answer_6.setText('Введите все значения')
             return
-        if not(''.join(self.num1_6.text().split('-')).isdigit()) or not(''.join(self.num2_6.text().split('-')).isdigit()):
+        if not(''.join(self.num1_6.text().split('-')).isdigit()) or\
+                not(''.join(self.num2_6.text().split('-')).isdigit()):
             self.answer_6.setText('Введите корректные значения')
             return
         self.answer_6.setText(answer)
@@ -629,7 +657,8 @@ class Integer_numbers(QWidget):
         if self.num1_7.text() == '' or self.num2_7.text() == '':
             self.answer_7.setText('Введите все значения')
             return
-        if not (''.join(self.num1_7.text().split('-')).isdigit()) or not (''.join(self.num2_7.text().split('-')).isdigit()):
+        if not (''.join(self.num1_7.text().split('-')).isdigit()) or\
+                not(''.join(self.num2_7.text().split('-')).isdigit()):
             self.answer_7.setText('Введите корректные значения')
             return
         self.answer_7.setText(answer)
@@ -639,7 +668,8 @@ class Integer_numbers(QWidget):
         if self.num1_8.text() == '' or self.num2_8.text() == '':
             self.answer_8.setText('Введите все значения')
             return
-        if not (''.join(self.num1_8.text().split('-')).isdigit()) or not(''.join(self.num2_8.text().split('-')).isdigit()):
+        if not (''.join(self.num1_8.text().split('-')).isdigit()) or\
+                not(''.join(self.num2_8.text().split('-')).isdigit()):
             self.answer_8.setText('Введите корректные значения')
             return
         if ''.join(self.num2_8.text().split('-')).isdigit() and int(self.num2_8.text()) == 0:
@@ -652,7 +682,8 @@ class Integer_numbers(QWidget):
         if self.num1_9.text() == '' or self.num2_9.text() == '':
             self.answer_9.setText('Введите все значения')
             return
-        if not(''.join(self.num1_9.text().split('-')).isdigit()) or not(''.join(self.num2_9.text().split('-')).isdigit()):
+        if not(''.join(self.num1_9.text().split('-')).isdigit()) or\
+                not(''.join(self.num2_9.text().split('-')).isdigit()):
             self.answer_9.setText('Введите корректные значения')
             return
         if ''.join(self.num2_9.text().split('-')).isdigit() and int(self.num2_9.text()) == 0:
@@ -782,6 +813,7 @@ class Integer_numbers(QWidget):
 
     def display(self, i):
         self.Stack.setCurrentIndex(i)
+        self.label.setText(self.labels[self.Stack.currentIndex()])
 
 
 class Ration_numbers(QWidget):
@@ -790,6 +822,13 @@ class Ration_numbers(QWidget):
         self.setWindowTitle("Ration numbers")
         self.setFixedSize(QSize(800, 400))
         self.setStyleSheet('background-color: #99FF99;')
+        self.labels = ['Сокращение дроби', 'Проверка сокращенного на целое', 'Преобразование из целого в дробное',
+                       'Преобразование из дробного в целое', 'Сложение двух дробей', 'Вычитание двух дробей',
+                       'Умножение дробей ', 'Деление дробей']
+        self.label = QLabel(self.labels[0])
+        self.font = self.label.font()
+        self.font.setBold(True)
+        self.label.setFont(self.font)
         self.operations_with_ration_num = QListWidget()
         self.operations_with_ration_num.insertItem(0, 'Сокращение дроби')
         self.operations_with_ration_num.insertItem(1, 'Проверка сокращенного на целое')
@@ -828,9 +867,10 @@ class Ration_numbers(QWidget):
         self.Stack.addWidget(self.multiplication)
         self.Stack.addWidget(self.division)
 
-        hbox = QHBoxLayout(self)
-        hbox.addWidget(self.operations_with_ration_num)
-        hbox.addWidget(self.Stack)
+        hbox = QGridLayout(self)
+        hbox.addWidget(self.label, 0, 0)
+        hbox.addWidget(self.operations_with_ration_num, 1, 0)
+        hbox.addWidget(self.Stack, 1, 1)
 
         self.setLayout(hbox)
         self.operations_with_ration_num.currentRowChanged.connect(self.display)
@@ -855,7 +895,8 @@ class Ration_numbers(QWidget):
         if not(''.join(self.numerator_0.text().split('-')).isdigit()):
             self.answer_n_0.setText('Введите корректное значение числителя')
             return
-        if not (''.join(self.denominator_0.text().split('-')).isdigit()) or (''.join(self.denominator_0.text().split('-')).isdigit() and int(self.denominator_0.text()) == 0):
+        if not (''.join(self.denominator_0.text().split('-')).isdigit()) or\
+                (''.join(self.denominator_0.text().split('-')).isdigit() and int(self.denominator_0.text()) == 0):
             self.answer_d_0.setText('Введите корректное значение знаменателя')
             return
         self.answer_n_0.setText(ans_n)
@@ -908,7 +949,8 @@ class Ration_numbers(QWidget):
         if self.denominator1_4.text() == '' or self.denominator2_4.text() == '':
             self.answer_d_4.setText('Введите знаменатель')
             return
-        if not(''.join(self.numerator1_4.text().split('-')).isdigit()) or not(''.join(self.numerator2_4.text().split('-')).isdigit()) :
+        if not(''.join(self.numerator1_4.text().split('-')).isdigit()) or\
+                not(''.join(self.numerator2_4.text().split('-')).isdigit()):
             self.answer_n_4.setText('Введите корректное значение числителя')
             return
         if not (self.denominator1_4.text().isdigit()) or (
@@ -930,7 +972,8 @@ class Ration_numbers(QWidget):
         if self.denominator1_5.text() == '' or self.denominator2_5.text() == '':
             self.answer_d_5.setText('Введите знаменатель')
             return
-        if not(''.join(self.numerator1_5.text().split('-')).isdigit()) or not(''.join(self.numerator2_5.text().split('-')).isdigit()) :
+        if not(''.join(self.numerator1_5.text().split('-')).isdigit()) or\
+                not(''.join(self.numerator2_5.text().split('-')).isdigit()) :
             self.answer_n_5.setText('Введите корректное значение числителя')
             return
         if not (self.denominator1_5.text().isdigit()) or (
@@ -952,7 +995,8 @@ class Ration_numbers(QWidget):
         if self.denominator1_6.text() == '' or self.denominator2_6.text() == '':
             self.answer_d_6.setText('Введите знаменатель')
             return
-        if not(''.join(self.numerator1_6.text().split('-')).isdigit()) or not(''.join(self.numerator2_6.text().split('-')).isdigit()) :
+        if not(''.join(self.numerator1_6.text().split('-')).isdigit()) or\
+                not(''.join(self.numerator2_6.text().split('-')).isdigit()) :
             self.answer_n_6.setText('Введите корректное значение числителя')
             return
         if not (self.denominator1_6.text().isdigit()) or (
@@ -974,7 +1018,8 @@ class Ration_numbers(QWidget):
         if self.denominator1_7.text() == '' or self.denominator2_7.text() == '':
             self.answer_d_7.setText('Введите знаменатель')
             return
-        if not(''.join(self.numerator1_7.text().split('-')).isdigit()) or not(''.join(self.numerator2_7.text().split('-')).isdigit()) :
+        if not(''.join(self.numerator1_7.text().split('-')).isdigit()) or\
+                not(''.join(self.numerator2_7.text().split('-')).isdigit()) :
             self.answer_n_7.setText('Введите корректное значение числителя')
             return
         if not (self.numerator2_7.text().isdigit()) or (
@@ -1158,6 +1203,7 @@ class Ration_numbers(QWidget):
 
     def display(self, i):
         self.Stack.setCurrentIndex(i)
+        self.label.setText(self.labels[self.Stack.currentIndex()])
 
 
 class Polinoms(QWidget):
@@ -1171,6 +1217,15 @@ class Polinoms(QWidget):
         self.polinom2 = Polinom()
         self.degree_of_polinom = self.polinom.get_degree()
         self.degree_of_polinom2 = self.polinom2.get_degree()
+        self.labels = ['Сложение многочленов', 'Вычитание многочленов', 'Умножение на рациональное число',
+                       'Умножение на x^k', 'Старший коэффициент многочлена', 'Степень многочлена',
+                       'НОК знаменателей и НОД числителей', 'Умножение многочленов',
+                       'Частное от деления многочлена на многочлен', 'Остаток от деления многочлена на многочлен',
+                       'НОД многочленов', 'Производная многочлена', 'Преобразование многочлена']
+        self.label = QLabel(self.labels[0])
+        self.font = self.label.font()
+        self.font.setBold(True)
+        self.label.setFont(self.font)
         self.operations_with_polinom = QListWidget()
         self.operations_with_polinom.insertItem(0, 'Сложение многочленов')
         self.operations_with_polinom.insertItem(1, 'Вычитание многочленов')
@@ -1189,6 +1244,10 @@ class Polinoms(QWidget):
         self.input_polinom = QPushButton("Ввести или изменить многочлен", self)
         self.input_polinom.resize(200, 40)
         self.input_polinom.clicked.connect(self.input_pol)
+
+        self.save_polinom = QPushButton("Выполнить действия с ответом", self)
+        self.save_polinom.resize(200, 40)
+        self.save_polinom.clicked.connect(self.save_pol)
 
         self.addition = QWidget()
         self.subtraction = QWidget()
@@ -1234,9 +1293,11 @@ class Polinoms(QWidget):
         self.Stack.addWidget(self.conversion)
 
         hbox = QGridLayout(self)
-        hbox.addWidget(self.operations_with_polinom, 0, 0)
-        hbox.addWidget(self.Stack, 0, 1)
-        hbox.addWidget(self.input_polinom, 1, 0)
+        hbox.addWidget(self.label, 0, 0)
+        hbox.addWidget(self.operations_with_polinom, 1, 0)
+        hbox.addWidget(self.Stack, 1, 1)
+        hbox.addWidget(self.input_polinom, 2, 0)
+        hbox.addWidget(self.save_polinom, 2, 1)
 
         self.setLayout(hbox)
         self.operations_with_polinom.currentRowChanged.connect(self.display)
@@ -1271,6 +1332,54 @@ class Polinoms(QWidget):
         self.input_for_polinoms.exec()
         self.pol2_0.setText(str(self.polinom2))
 
+    def save_pol(self):
+        text = 'Answer'
+        if self.Stack.currentWidget() == self.addition:
+            text = self.answer_0.text()
+        elif self.Stack.currentWidget() == self.subtraction:
+            text = self.answer_1.text()
+        elif self.Stack.currentWidget() == self.multiplication_by_ration_number:
+            text = self.answer_2.text()
+        elif self.Stack.currentWidget() == self.multiplication_by_x:
+            text = self.answer_3.text()
+        elif self.Stack.currentWidget() == self.leading_coefficient:
+            text = self.answer_4.text()
+        elif self.Stack.currentWidget() == self.degree:
+            text = self.answer_5.text()
+        elif self.Stack.currentWidget() == self.NOK_NOD:
+            text = self.answer_6.text()
+        elif self.Stack.currentWidget() == self.multiplication:
+            text = self.answer_7.text()
+        elif self.Stack.currentWidget() == self.quotient_of_division:
+            text = self.answer_8.text()
+        elif self.Stack.currentWidget() == self.remainder_of_division:
+            text = self.answer_9.text()
+        elif self.Stack.currentWidget() == self.NOD:
+            text = self.answer_10.text()
+        elif self.Stack.currentWidget() == self.derivative:
+            text = self.answer_11.text()
+        elif self.Stack.currentWidget() == self.conversion:
+            text = self.answer_12.text()
+        if text != 'Answer' and text != 'Введите числитель' and text != 'Введите знаменатель' and text != '' and\
+            text != 'Введите корректное значение числителя' and text != 'Введите корректное значение знаменателя':
+            self.move_polinom(text)
+
+    def move_polinom(self, polinom):
+        self.pol1_0.setText(polinom)
+        self.pol1_1.setText(polinom)
+        self.pol1_2.setText(polinom)
+        self.pol1_3.setText(polinom)
+        self.pol1_4.setText(polinom)
+        self.pol1_5.setText(polinom)
+        self.pol1_6.setText(polinom)
+        self.pol1_7.setText(polinom)
+        self.pol1_8.setText(polinom)
+        self.pol1_9.setText(polinom)
+        self.pol1_10.setText(polinom)
+        self.pol1_11.setText(polinom)
+        self.pol1_12.setText(polinom)
+        self.polinom.str_to_polinom(polinom)
+
     def addition_res(self):
         answer = 'Answer'
         self.answer_0.setText(answer)
@@ -1290,7 +1399,8 @@ class Polinoms(QWidget):
         if not(''.join(self.numerator_2.text().split('-')).isdigit()):
             self.answer_2.setText('Введите корректное значение числителя')
             return
-        if not (''.join(self.denominator_2.text().split('-')).isdigit()) or (''.join(self.denominator_2.text().split('-')).isdigit() and int(self.denominator_2.text()) == 0):
+        if not (''.join(self.denominator_2.text().split('-')).isdigit()) or\
+                (''.join(self.denominator_2.text().split('-')).isdigit() and int(self.denominator_2.text()) == 0):
             self.answer_2.setText('Введите корректное значение знаменателя')
             return
         self.answer_2.setText(answer)
@@ -1573,6 +1683,7 @@ class Polinoms(QWidget):
 
     def display(self, i):
         self.Stack.setCurrentIndex(i)
+        self.label.setText(self.labels[self.Stack.currentIndex()])
 
 
 class Polinom():
@@ -1603,7 +1714,11 @@ class Polinom():
         return line
 
     def str_to_polinom(self, line):
-        if line == '':
+        st = ''.join(line.split())
+        sign = ['^', 'x', '-', '+']
+        for el in sign:
+            st = ''.join(st.split(el))
+        if line == '' or not(st.isdigit()):
             line = '0'
         line = line.split('+')
         line = [el.split('x^') for el in line]
@@ -1618,9 +1733,9 @@ class Polinom():
                 if int(el[1]) > self.degree:
                     self.change_size(int(el[1]))
                 if '.' in el[0]:
-                    self.polinom[int(el[1])] = float(el[0])
+                    self.change(int(el[1]), float(el[0]))
                 else:
-                    self.polinom[int(el[1])] = int(el[0])
+                    self.change(int(el[1]), int(el[0]))
             else:
                 if len(el[0]) > 0:
                     el[0] = ''.join(el[0].split())
@@ -1630,9 +1745,9 @@ class Polinom():
                         el[0] = '-1'
                     if 'x' not in el[0]:
                         if '.' in el[0]:
-                            self.polinom[0] = float(el[0])
+                            self.change(0, float(el[0]))
                         else:
-                            self.polinom[0] = int(el[0])
+                            self.change(0, int(el[0]))
                     else:
                         if self.degree < 1:
                             self.change_size(1)
@@ -1642,9 +1757,9 @@ class Polinom():
                         elif m == '-':
                             m = '-1'
                         if '.' in m:
-                            self.polinom[1] = float(m)
+                            self.change(1, float(m))
                         else:
-                            self.polinom[1] = int(m)
+                            self.change(1, int(m))
 
     def get_polinom(self):
         return self.polinom
@@ -1750,7 +1865,8 @@ class Input_polinom(QDialog):
             return
         if self.coef.text().isdigit() or (self.coef.text()[0] == '-' and self.coef.text()[1:].isdigit()):
             self.polinom.change(m, int(self.coef.text()))
-        elif ''.join(self.coef.text().split('.')).isdigit() or (self.coef.text()[0] == '-' and ''.join(self.coef.text().split('.'))[1:].isdigit()):
+        elif ''.join(self.coef.text().split('.')).isdigit() or\
+                (self.coef.text()[0] == '-' and ''.join(self.coef.text().split('.'))[1:].isdigit()):
             self.polinom.change(m, float(self.coef.text()))
 
     def end(self):
