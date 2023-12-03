@@ -1,8 +1,10 @@
 import sys
 
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import QSize
 from PyQt6.QtWidgets import *
-from PyQt6.QtGui import QPalette
+from Natural import Natural
+from Integer import Integer
+from Ratio import Rational
 
 
 # Подкласс QMainWindow для настройки главного окна приложения
@@ -74,7 +76,7 @@ class Natural_numbers(QWidget):
         self.setWindowTitle("Natural numbers")
         self.setFixedSize(QSize(800, 400))
         self.setStyleSheet('background-color: #B4DAF6;')
-        self.labels = ['Сравнение натуральных чисел', 'Проверка на ноль', 'Добавление единицы', 'Сложение двух чисел',
+        self.labels = ['Сравнение натуральных чисел', 'Проверка на "не ноль"', 'Добавление единицы', 'Сложение двух чисел',
                   'Вычитание двух чисел', 'Умножение на цифру', 'Умножение на 10^k', 'Умножение',
                   'Вычитание с умножением на цифру', 'Вычисление первой цифры', 'Неполное частное',
                   'Остаток от деления', 'НОД', 'НОК']
@@ -84,7 +86,7 @@ class Natural_numbers(QWidget):
         self.label.setFont(self.font)
         self.operations_with_natural_num = QListWidget()
         self.operations_with_natural_num.insertItem(0, 'Сравнение натуральных чисел')
-        self.operations_with_natural_num.insertItem(1, 'Проверка на ноль')
+        self.operations_with_natural_num.insertItem(1, 'Проверка на "не ноль"')
         self.operations_with_natural_num.insertItem(2, 'Добавление единицы')
         self.operations_with_natural_num.insertItem(3, 'Сложение двух чисел')
         self.operations_with_natural_num.insertItem(4, 'Вычитание двух чисел')
@@ -174,6 +176,15 @@ class Natural_numbers(QWidget):
         if not(self.num1_0.text().isdigit()) or not(self.num2_0.text().isdigit()):
             self.answer_0.setText('Введите корректные значения')
             return
+        num1 = Natural(self.num1_0.text())
+        num2 = Natural(self.num2_0.text())
+        answer = str(num1.COM_NN_D(num2))
+        if answer == '2':
+            answer += ' ( > )'
+        elif answer == '1':
+            answer += ' ( < )'
+        else:
+            answer += ' ( = )'
         self.answer_0.setText(answer)
 
     def check_zero_res(self):
@@ -184,6 +195,12 @@ class Natural_numbers(QWidget):
         if not(self.num1_1.text().isdigit()):
             self.answer_1.setText('Введите корректное значение')
             return
+        num1 = Natural(self.num1_1.text())
+        answer = num1.NZER_N_B()
+        if answer:
+            answer = 'да'
+        else:
+            answer = 'нет'
         self.answer_1.setText(answer)
 
     def add_1_res(self):
@@ -194,6 +211,8 @@ class Natural_numbers(QWidget):
         if not(self.num1_2.text().isdigit()):
             self.answer_2.setText('Введите корректное значение')
             return
+        num1 = Natural(self.num1_2.text())
+        answer = str(num1.ADD_1N_N())
         self.answer_2.setText(answer)
 
     def addition_res(self):
@@ -204,6 +223,9 @@ class Natural_numbers(QWidget):
         if not(self.num1_3.text().isdigit()) or not(self.num2_3.text().isdigit()):
             self.answer_3.setText('Введите корректные значения')
             return
+        num1 = Natural(self.num1_3.text())
+        num2 = Natural(self.num2_3.text())
+        answer = str(num1.ADD_NN_N(num2))
         self.answer_3.setText(answer)
 
     def subtraction_res(self):
@@ -214,6 +236,12 @@ class Natural_numbers(QWidget):
         if not(self.num1_4.text().isdigit()) or not(self.num2_4.text().isdigit()):
             self.answer_4.setText('Введите корректные значения')
             return
+        num1 = Natural(self.num1_4.text())
+        num2 = Natural(self.num2_4.text())
+        if Natural.COM_NN_D(num1, num2) % 2 == 0:
+            answer = str(num1.SUB_NN_N(num2))
+        else:
+            answer = str(num2.SUB_NN_N(num1)) + ' (в ходе решения числа поменяны местами)'
         self.answer_4.setText(answer)
 
     def multiplication_by_digit_res(self):
@@ -224,7 +252,9 @@ class Natural_numbers(QWidget):
         if not (self.num1_5.text().isdigit()):
             self.answer_5.setText('Введите корректные значения')
             return
-        # получить значение spinbox - .value() - int
+        num1 = Natural(self.num1_5.text())
+        num2 = self.digit_spinbox_5.value()
+        answer = str(num1.MUL_ND_N(num2))
         self.answer_5.setText(answer)
 
     def multiplication_by_ten_res(self):
@@ -235,6 +265,9 @@ class Natural_numbers(QWidget):
         if not (self.num1_6.text().isdigit()) or not (self.num2_6.text().isdigit()):
             self.answer_6.setText('Введите корректные значения')
             return
+        num1 = Natural(self.num1_6.text())
+        num2 = int(self.num2_6.text())
+        answer = str(num1.MUL_Nk_N(num2))
         self.answer_6.setText(answer)
 
     def multiplication_res(self):
@@ -245,6 +278,9 @@ class Natural_numbers(QWidget):
         if not (self.num1_7.text().isdigit()) or not (self.num2_7.text().isdigit()):
             self.answer_7.setText('Введите корректные значения')
             return
+        num1 = Natural(self.num1_7.text())
+        num2 = Natural(self.num2_7.text())
+        answer = str(num1.MUL_NN_N(num2))
         self.answer_7.setText(answer)
 
     def subtraction_with_multiplication_res(self):
@@ -255,6 +291,10 @@ class Natural_numbers(QWidget):
         if not (self.num1_8.text().isdigit()) or not (self.num2_8.text().isdigit()):
             self.answer_8.setText('Введите корректные значения')
             return
+        num1 = Natural(self.num1_8.text())
+        num2 = Natural(self.num2_8.text())
+        k = self.digit_spinbox_8.value()
+        answer = str(num1.SUB_NDN_N(num2, k))
         self.answer_8.setText(answer)
 
     def first_digit_res(self):
@@ -265,10 +305,15 @@ class Natural_numbers(QWidget):
         if (not(self.num1_9.text().isdigit()) or not (self.num2_9.text().isdigit())):
             self.answer_9.setText('Введите корректные значения')
             return
-        if self.num2_9.text().isdigit() and (int(self.num2_9.text()) < 0 or\
-                                             int(self.num2_9.text()) >= len(self.num1_9.text())):
+        if self.num2_9.text().isdigit() and (int(self.num2_9.text()) <= 0):
             self.answer_9.setText('Введите корректное значение позиции цифры')
             return
+        num1 = Natural(self.num1_9.text())
+        num2 = Natural(self.num2_9.text())
+        if num2.COM_NN_D(Natural('0')) == 0:
+            self.answer_9.setText('Введите корректные значения')
+            return
+        answer = str(num1.DIV_NN_Dk(num2))
         self.answer_9.setText(answer)
 
     def incomplete_quotient_res(self):
@@ -279,6 +324,12 @@ class Natural_numbers(QWidget):
         if not (self.num1_10.text().isdigit()) or not (self.num2_10.text().isdigit()):
             self.answer_10.setText('Введите корректные значения')
             return
+        num1 = Natural(self.num1_10.text())
+        num2 = Natural(self.num2_10.text())
+        if num2.COM_NN_D(Natural('0')) == 0:
+            self.answer_10.setText('Введите корректные значения')
+            return
+        answer = str(num1.DIV_NN_N(num2))
         self.answer_10.setText(answer)
 
     def remainder_of_division_res(self):
@@ -289,6 +340,12 @@ class Natural_numbers(QWidget):
         if not (self.num1_11.text().isdigit()) or not (self.num2_11.text().isdigit()):
             self.answer_11.setText('Введите корректные значения')
             return
+        num1 = Natural(self.num1_11.text())
+        num2 = Natural(self.num2_11.text())
+        if num2.COM_NN_D(Natural('0')) == 0:
+            self.answer_11.setText('Введите корректные значения')
+            return
+        answer = str(num1.MOD_NN_N(num2))
         self.answer_11.setText(answer)
 
     def NOD_res(self):
@@ -299,6 +356,9 @@ class Natural_numbers(QWidget):
         if not (self.num1_12.text().isdigit()) or not (self.num2_12.text().isdigit()):
             self.answer_12.setText('Введите корректные значения')
             return
+        num1 = Natural(self.num1_12.text())
+        num2 = Natural(self.num2_12.text())
+        answer = str(num1.GCF_NN_N(num2))
         self.answer_12.setText(answer)
 
     def NOK_res(self):
@@ -309,6 +369,9 @@ class Natural_numbers(QWidget):
         if not (self.num1_13.text().isdigit()) or not (self.num2_13.text().isdigit()):
             self.answer_13.setText('Введите корректные значения')
             return
+        num1 = Natural(self.num1_13.text())
+        num2 = Natural(self.num2_13.text())
+        answer = str(num1.LCM_NN_N(num2))
         self.answer_13.setText(answer)
 
     def comparing_num_ui(self):
@@ -438,7 +501,7 @@ class Natural_numbers(QWidget):
         self.answer_9 = QLineEdit()
         self.answer_9.setReadOnly(True)
         layout.addRow("Число", self.num1_9)
-        layout.addRow("Номер позиции", self.num2_9)
+        layout.addRow("Делитель", self.num2_9)
         layout.addRow(self.res_9)
         layout.addRow("Ответ", self.answer_9)
         self.first_digit.setLayout(layout)
@@ -586,17 +649,21 @@ class Integer_numbers(QWidget):
         if not (''.join(self.num1_0.text().split('-')).isdigit()):
             self.answer_0.setText('Введите корректное значение')
             return
+        num = Integer(self.num1_0.text())
+        answer = str(num.ABS_Z_N())
         self.answer_0.setText(answer)
 
     def positivity_res(self):
-        answer = ['отрицательное', 'равно нулю', 'положительное']
-        res = 1
+        answer = ['равно нулю', 'отрицательное', 'положительное']
+        res = 0
         if self.num1_1.text() == '':
             self.answer_1.setText('Введите значение')
             return
         if not (''.join(self.num1_1.text().split('-')).isdigit()):
             self.answer_1.setText('Введите корректное значение')
             return
+        num = Integer(self.num1_1.text())
+        res = num.POZ_Z_D()
         self.answer_1.setText(answer[res])
 
     def multiplication_by_m1_res(self):
@@ -607,6 +674,8 @@ class Integer_numbers(QWidget):
         if not (''.join(self.num1_2.text().split('-')).isdigit()):
             self.answer_2.setText('Введите корректное значение')
             return
+        num = Integer(self.num1_2.text())
+        answer = str(num.MUL_ZM_Z())
         self.answer_2.setText(answer)
 
     def conversion_n_to_z_res(self):
@@ -614,9 +683,12 @@ class Integer_numbers(QWidget):
         if self.num1_3.text() == '':
             self.answer_3.setText('Введите значение')
             return
-        if not (''.join(self.num1_3.text().split('-')).isdigit()):
+        if not(''.join(self.num1_3.text().split('-')).isdigit()) or\
+                (''.join(self.num1_3.text().split('-')).isdigit() and int(self.num1_3.text()) < 0):
             self.answer_3.setText('Введите корректное значение')
             return
+        num = Natural(self.num1_3.text())
+        answer = str(Integer.TRANS_N_Z(num))
         self.answer_3.setText(answer)
 
     def conversion_z_to_n_res(self):
@@ -624,10 +696,12 @@ class Integer_numbers(QWidget):
         if self.num1_4.text() == '':
             self.answer_4.setText('Введите значение')
             return
-        if not(''.join(self.num1_4.text().split('-')).isdigit()) or\
+        if not (''.join(self.num1_4.text().split('-')).isdigit()) or \
                 (''.join(self.num1_4.text().split('-')).isdigit() and int(self.num1_4.text()) < 0):
             self.answer_4.setText('Введите корректное значение')
             return
+        num = Integer(self.num1_4.text())
+        answer = str(num.TRANS_Z_N())
         self.answer_4.setText(answer)
 
     def addition_res(self):
@@ -639,6 +713,8 @@ class Integer_numbers(QWidget):
                 not(''.join(self.num2_5.text().split('-')).isdigit()):
             self.answer_5.setText('Введите корректные значения')
             return
+        num1, num2 = Integer(self.num1_5.text()), Integer(self.num2_5.text())
+        answer = str(num1.ADD_ZZ_Z(num2))
         self.answer_5.setText(answer)
 
     def subtraction_res(self):
@@ -650,6 +726,8 @@ class Integer_numbers(QWidget):
                 not(''.join(self.num2_6.text().split('-')).isdigit()):
             self.answer_6.setText('Введите корректные значения')
             return
+        num1, num2 = Integer(self.num1_6.text()), Integer(self.num2_6.text())
+        answer = str(num1.SUB_ZZ_Z(num2))
         self.answer_6.setText(answer)
 
     def multiplication_res(self):
@@ -661,6 +739,8 @@ class Integer_numbers(QWidget):
                 not(''.join(self.num2_7.text().split('-')).isdigit()):
             self.answer_7.setText('Введите корректные значения')
             return
+        num1, num2 = Integer(self.num1_7.text()), Integer(self.num2_7.text())
+        answer = str(num1.MUL_ZZ_Z(num2))
         self.answer_7.setText(answer)
 
     def quotient_of_division_res(self):
@@ -675,6 +755,8 @@ class Integer_numbers(QWidget):
         if ''.join(self.num2_8.text().split('-')).isdigit() and int(self.num2_8.text()) == 0:
             self.answer_8.setText('Введите корректное значение делителя')
             return
+        num1, num2 = Integer(self.num1_8.text()), Integer(self.num2_8.text())
+        answer = str(num1.DIV_ZZ_Z(num2))
         self.answer_8.setText(answer)
 
     def remainder_of_division_res(self):
@@ -689,6 +771,8 @@ class Integer_numbers(QWidget):
         if ''.join(self.num2_9.text().split('-')).isdigit() and int(self.num2_9.text()) == 0:
             self.answer_9.setText('Введите корректное значение делителя')
             return
+        num1, num2 = Integer(self.num1_9.text()), Integer(self.num2_9.text())
+        answer = str(num1.MOD_ZZ_Z(num2))
         self.answer_9.setText(answer)
 
     def absolute_value_ui(self):
@@ -896,24 +980,28 @@ class Ration_numbers(QWidget):
             self.answer_n_0.setText('Введите корректное значение числителя')
             return
         if not (''.join(self.denominator_0.text().split('-')).isdigit()) or\
-                (''.join(self.denominator_0.text().split('-')).isdigit() and int(self.denominator_0.text()) == 0):
+                (''.join(self.denominator_0.text().split('-')).isdigit() and int(self.denominator_0.text()) <= 0):
             self.answer_d_0.setText('Введите корректное значение знаменателя')
             return
+        num = Rational(self.numerator_0.text(), self.denominator_0.text())
+        ans_n, ans_d = map(str, str(num.RED_Q_Q()).split())
         self.answer_n_0.setText(ans_n)
         self.answer_d_0.setText(ans_d)
 
     def check_abbreviated_num_res(self):
-        answer = 'Answer'
+        answer = ['нет', 'да']
         if self.numerator_1.text() == '' or self.denominator_1.text() == '':
             self.answer_1.setText('Введите значения')
             return
-        if not(''.join(self.numerator_0.text().split('-')).isdigit()):
+        if not(''.join(self.numerator_1.text().split('-')).isdigit()):
             self.answer_1.setText('Введите корректное значение числителя')
             return
         if not (self.denominator_1.text().isdigit()) or (
-                self.denominator_1.text().isdigit() and int(self.denominator_1.text()) == 0):
+                self.denominator_1.text().isdigit() and int(self.denominator_1.text()) <= 0):
             self.answer_1.setText('Введите корректное значение знаменателя')
             return
+        num = Rational(self.numerator_1.text(), self.denominator_1.text())
+        answer = answer[int(num.INT_Q_B())]
         self.answer_1.setText(answer)
 
     def conversion_z_to_q_res(self):
@@ -924,6 +1012,8 @@ class Ration_numbers(QWidget):
         if not(''.join(self.num_2.text().split('-')).isdigit()):
             self.answer_n_2.setText('Введите корректное значение')
             return
+        num = Integer(self.num_2.text())
+        ans_n, ans_d = map(str, str(Rational.TRANS_Z_Q(num)).split())
         self.answer_n_2.setText(ans_n)
         self.answer_d_2.setText(ans_d)
 
@@ -936,9 +1026,11 @@ class Ration_numbers(QWidget):
             self.answer_3.setText('Введите корректное значение числителя')
             return
         if not (self.denominator_3.text().isdigit()) or (
-                self.denominator_3.text().isdigit() and int(self.denominator_3.text()) == 0):
+                self.denominator_3.text().isdigit() and int(self.denominator_3.text()) != 1):
             self.answer_3.setText('Введите корректное значение знаменателя')
             return
+        num = Rational(self.numerator_3.text(), self.denominator_3.text())
+        answer = str(num.TRANS_Q_Z())
         self.answer_3.setText(answer)
 
     def addition_res(self):
@@ -954,13 +1046,16 @@ class Ration_numbers(QWidget):
             self.answer_n_4.setText('Введите корректное значение числителя')
             return
         if not (self.denominator1_4.text().isdigit()) or (
-                self.denominator1_4.text().isdigit() and int(self.denominator1_4.text()) == 0):
+                self.denominator1_4.text().isdigit() and int(self.denominator1_4.text()) <= 0):
             self.answer_d_4.setText('Введите корректное значение знаменателя')
             return
         if not (self.denominator2_4.text().isdigit()) or (
-                self.denominator2_4.text().isdigit() and int(self.denominator2_4.text()) == 0):
+                self.denominator2_4.text().isdigit() and int(self.denominator2_4.text()) <= 0):
             self.answer_d_4.setText('Введите корректное значение знаменателя')
             return
+        num1 = Rational(self.numerator1_4.text(), self.denominator1_4.text())
+        num2 = Rational(self.numerator2_4.text(), self.denominator2_4.text())
+        ans_n, ans_d = map(str, str(num1.ADD_QQ_Q(num2)).split())
         self.answer_n_4.setText(ans_n)
         self.answer_d_4.setText(ans_d)
 
@@ -977,13 +1072,16 @@ class Ration_numbers(QWidget):
             self.answer_n_5.setText('Введите корректное значение числителя')
             return
         if not (self.denominator1_5.text().isdigit()) or (
-                self.denominator1_5.text().isdigit() and int(self.denominator1_5.text()) == 0):
+                self.denominator1_5.text().isdigit() and int(self.denominator1_5.text()) <= 0):
             self.answer_d_5.setText('Введите корректное значение знаменателя')
             return
         if not (self.denominator2_5.text().isdigit()) or (
-                self.denominator2_5.text().isdigit() and int(self.denominator2_5.text()) == 0):
+                self.denominator2_5.text().isdigit() and int(self.denominator2_5.text()) <= 0):
             self.answer_d_5.setText('Введите корректное значение знаменателя')
             return
+        num1 = Rational(self.numerator1_5.text(), self.denominator1_5.text())
+        num2 = Rational(self.numerator2_5.text(), self.denominator2_5.text())
+        ans_n, ans_d = map(str, str(num1.SUB_QQ_Q(num2)).split())
         self.answer_n_5.setText(ans_n)
         self.answer_d_5.setText(ans_d)
 
@@ -1000,13 +1098,16 @@ class Ration_numbers(QWidget):
             self.answer_n_6.setText('Введите корректное значение числителя')
             return
         if not (self.denominator1_6.text().isdigit()) or (
-                self.denominator1_6.text().isdigit() and int(self.denominator1_6.text()) == 0):
+                self.denominator1_6.text().isdigit() and int(self.denominator1_6.text()) <= 0):
             self.answer_d_6.setText('Введите корректное значение знаменателя')
             return
         if not (self.denominator2_6.text().isdigit()) or (
-                self.denominator2_6.text().isdigit() and int(self.denominator2_6.text()) == 0):
+                self.denominator2_6.text().isdigit() and int(self.denominator2_6.text()) <= 0):
             self.answer_d_6.setText('Введите корректное значение знаменателя')
             return
+        num1 = Rational(self.numerator1_6.text(), self.denominator1_6.text())
+        num2 = Rational(self.numerator2_6.text(), self.denominator2_6.text())
+        ans_n, ans_d = map(str, str(num1.MUL_QQ_Q(num2)).split())
         self.answer_n_6.setText(ans_n)
         self.answer_d_6.setText(ans_d)
 
@@ -1027,13 +1128,16 @@ class Ration_numbers(QWidget):
             self.answer_n_7.setText('Делитель не должен быть равен нулю')
             return
         if not (self.denominator1_7.text().isdigit()) or (
-                self.denominator1_7.text().isdigit() and int(self.denominator1_7.text()) == 0):
+                self.denominator1_7.text().isdigit() and int(self.denominator1_7.text()) <= 0):
             self.answer_d_7.setText('Введите корректное значение знаменателя')
             return
         if not (self.denominator2_7.text().isdigit()) or (
-                self.denominator2_7.text().isdigit() and int(self.denominator2_7.text()) == 0):
+                self.denominator2_7.text().isdigit() and int(self.denominator2_7.text()) <= 0):
             self.answer_d_7.setText('Введите корректное значение знаменателя')
             return
+        num1 = Rational(self.numerator1_7.text(), self.denominator1_7.text())
+        num2 = Rational(self.numerator2_7.text(), self.denominator2_7.text())
+        ans_n, ans_d = map(str, str(num1.DIV_QQ_Q(num2)).split())
         self.answer_n_7.setText(ans_n)
         self.answer_d_7.setText(ans_d)
 
