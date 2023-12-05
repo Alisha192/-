@@ -1055,11 +1055,8 @@ class Ration_numbers(QWidget):
             self.answer_d_4.setText('Введите корректное значение знаменателя')
             return
         num1 = Rational(self.numerator1_4.text(), self.denominator1_4.text())
-        print("1", num1)
         num2 = Rational(self.numerator2_4.text(), self.denominator2_4.text())
-        print("2", num2)
         answer = num1.ADD_QQ_Q(num2)
-        print(answer)
         ans_n, ans_d = map(str, str(answer).split('/'))
         self.answer_n_4.setText(ans_n)
         self.answer_d_4.setText(ans_d)
@@ -1490,12 +1487,6 @@ class Polinoms(QWidget):
         self.polinom.str_to_polinom(polinom)
 
     def addition_res(self):
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print('vvvvvvvvvv')
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         polinom_2 = Polynom(self.polinom2.get_polinom())
         answer = polinom_1.ADD_PP_P(polinom_2)
@@ -1508,12 +1499,6 @@ class Polinoms(QWidget):
         self.answer_0.setText(str(answer_polinom))
 
     def subtraction_res(self):
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print('vvvvvvvvvv')
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         polinom_2 = Polynom(self.polinom2.get_polinom())
         answer = polinom_1.SUB_PP_P(polinom_2).get_coef()
@@ -1539,9 +1524,6 @@ class Polinoms(QWidget):
                 (''.join(self.denominator_2.text().split('-')).isdigit() and int(self.denominator_2.text()) == 0):
             self.answer_2.setText('Введите корректное значение знаменателя')
             return
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         ratio = Rational(self.numerator_2.text(), self.denominator_2.text())
         answer = polinom_1.MUL_PQ_P(ratio)
@@ -1554,9 +1536,6 @@ class Polinoms(QWidget):
         self.answer_2.setText(str(answer_polinom))
 
     def multiplication_by_x_res(self):
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         k = int(self.num_3.text())
         answer = polinom_1.MUL_Pxk_P(k)
@@ -1569,39 +1548,23 @@ class Polinoms(QWidget):
         self.answer_3.setText(str(answer_polinom))
 
     def leading_coefficient_res(self):
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
-        print(polinom_1)
         answer = polinom_1.LED_P_Q()
         if answer.denumerator.COM_NN_D(Natural('1')) == 0:
             answer = answer.numerator
         self.answer_4.setText(str(answer))
 
     def degree_res(self):
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         answer = polinom_1.DEG_P_N()
         self.answer_5.setText(str(answer))
 
     def NOK_NOD_res(self):
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         answer = polinom_1.FAC_P_Q()
         self.answer_6.setText(str(answer).split('/')[0])
 
     def multiplication_res(self):
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print('vvvvvvvvvv')
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         polinom_2 = Polynom(self.polinom2.get_polinom())
         answer = polinom_1.MUL_PP_P(polinom_2)
@@ -1617,12 +1580,6 @@ class Polinoms(QWidget):
         if self.pol2_8.text() == '0' or self.pol2_8.text() == '':
             self.answer_8.setText('Знаменатель не может быть нулём')
             return
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print('vvvvvvvvvv')
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         polinom_2 = Polynom(self.polinom2.get_polinom())
         answer = polinom_1.DIV_PP_P(polinom_2)
@@ -1638,12 +1595,6 @@ class Polinoms(QWidget):
         if self.pol2_9.text() == '0' or self.pol2_9.text() == '':
             self.answer_9.setText('Знаменатель не может быть нулём')
             return
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print('vvvvvvvvvv')
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         polinom_2 = Polynom(self.polinom2.get_polinom())
         answer = polinom_1.MOD_PP_P(polinom_2)
@@ -1656,12 +1607,6 @@ class Polinoms(QWidget):
         self.answer_9.setText(str(answer_polinom))
 
     def NOD_res(self):
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print('vvvvvvvvvv')
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         polinom_2 = Polynom(self.polinom2.get_polinom())
         answer = polinom_1.GCF_PP_P(polinom_2)
@@ -1674,9 +1619,6 @@ class Polinoms(QWidget):
         self.answer_10.setText(str(answer_polinom))
 
     def derivative_res(self):
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         answer = polinom_1.DER_P_P()
         answer = answer.get_coef()
@@ -1688,9 +1630,6 @@ class Polinoms(QWidget):
         self.answer_11.setText(str(answer_polinom))
 
     def conversion_res(self):
-        for el in self.polinom.get_polinom():
-            print(str(el), end='\t')
-        print()
         polinom_1 = Polynom(self.polinom.get_polinom())
         answer = polinom_1.NMR_P_P()
         answer = answer.get_coef()
