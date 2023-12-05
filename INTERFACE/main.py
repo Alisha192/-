@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import *
 from Natural import Natural
 from Integer import Integer
 from Ratio import Rational
+from Polynom import Polynom
 
 
 # Подкласс QMainWindow для настройки главного окна приложения
@@ -15,7 +16,7 @@ class MainWindow(QMainWindow):
         self.setFixedSize(QSize(300, 220))
         self.setStyleSheet('background-color: #FDBBE7;')
         self.degree_of_polinom = 0
-        self.polinom = Polinom(0)
+        self.polinom = Polinom_interface(0)
         self.Menu()
 
     def Menu(self):
@@ -984,7 +985,7 @@ class Ration_numbers(QWidget):
             self.answer_d_0.setText('Введите корректное значение знаменателя')
             return
         num = Rational(self.numerator_0.text(), self.denominator_0.text())
-        ans_n, ans_d = map(str, str(num.RED_Q_Q()).split())
+        ans_n, ans_d = map(str, str(num.RED_Q_Q()).split('/'))
         self.answer_n_0.setText(ans_n)
         self.answer_d_0.setText(ans_d)
 
@@ -1013,7 +1014,7 @@ class Ration_numbers(QWidget):
             self.answer_n_2.setText('Введите корректное значение')
             return
         num = Integer(self.num_2.text())
-        ans_n, ans_d = map(str, str(Rational.TRANS_Z_Q(num)).split())
+        ans_n, ans_d = map(str, str(Rational.TRANS_Z_Q(num)).split('/'))
         self.answer_n_2.setText(ans_n)
         self.answer_d_2.setText(ans_d)
 
@@ -1054,8 +1055,12 @@ class Ration_numbers(QWidget):
             self.answer_d_4.setText('Введите корректное значение знаменателя')
             return
         num1 = Rational(self.numerator1_4.text(), self.denominator1_4.text())
+        print("1", num1)
         num2 = Rational(self.numerator2_4.text(), self.denominator2_4.text())
-        ans_n, ans_d = map(str, str(num1.ADD_QQ_Q(num2)).split())
+        print("2", num2)
+        answer = num1.ADD_QQ_Q(num2)
+        print(answer)
+        ans_n, ans_d = map(str, str(answer).split('/'))
         self.answer_n_4.setText(ans_n)
         self.answer_d_4.setText(ans_d)
 
@@ -1081,7 +1086,7 @@ class Ration_numbers(QWidget):
             return
         num1 = Rational(self.numerator1_5.text(), self.denominator1_5.text())
         num2 = Rational(self.numerator2_5.text(), self.denominator2_5.text())
-        ans_n, ans_d = map(str, str(num1.SUB_QQ_Q(num2)).split())
+        ans_n, ans_d = map(str, str(num1.SUB_QQ_Q(num2)).split('/'))
         self.answer_n_5.setText(ans_n)
         self.answer_d_5.setText(ans_d)
 
@@ -1107,7 +1112,7 @@ class Ration_numbers(QWidget):
             return
         num1 = Rational(self.numerator1_6.text(), self.denominator1_6.text())
         num2 = Rational(self.numerator2_6.text(), self.denominator2_6.text())
-        ans_n, ans_d = map(str, str(num1.MUL_QQ_Q(num2)).split())
+        ans_n, ans_d = map(str, str(num1.MUL_QQ_Q(num2)).split('/'))
         self.answer_n_6.setText(ans_n)
         self.answer_d_6.setText(ans_d)
 
@@ -1137,7 +1142,7 @@ class Ration_numbers(QWidget):
             return
         num1 = Rational(self.numerator1_7.text(), self.denominator1_7.text())
         num2 = Rational(self.numerator2_7.text(), self.denominator2_7.text())
-        ans_n, ans_d = map(str, str(num1.DIV_QQ_Q(num2)).split())
+        ans_n, ans_d = map(str, str(num1.DIV_QQ_Q(num2)).split('/'))
         self.answer_n_7.setText(ans_n)
         self.answer_d_7.setText(ans_d)
 
@@ -1318,7 +1323,7 @@ class Polinoms(QWidget):
         self.setFixedSize(QSize(800, 400))
         self.setStyleSheet('background-color: #CC99FF;')
         self.polinom = polinom
-        self.polinom2 = Polinom()
+        self.polinom2 = Polinom_interface()
         self.degree_of_polinom = self.polinom.get_degree()
         self.degree_of_polinom2 = self.polinom2.get_degree()
         self.labels = ['Сложение многочленов', 'Вычитание многочленов', 'Умножение на рациональное число',
@@ -1485,12 +1490,39 @@ class Polinoms(QWidget):
         self.polinom.str_to_polinom(polinom)
 
     def addition_res(self):
-        answer = 'Answer'
-        self.answer_0.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print('vvvvvvvvvv')
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        polinom_2 = Polynom(self.polinom2.get_polinom())
+        answer = polinom_1.ADD_PP_P(polinom_2)
+        answer = answer.get_coef()
+        for i in range(len(answer)):
+            if answer[i].denumerator.COM_NN_D(Natural('1')) == 0:
+                answer[i] = Integer(str(answer[i]).split('/')[0])
+        answer_polinom = Polinom_interface(len(answer) - 1)
+        answer_polinom.input_polinom(answer)
+        self.answer_0.setText(str(answer_polinom))
 
     def subtraction_res(self):
-        answer = 'Answer'
-        self.answer_1.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print('vvvvvvvvvv')
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        polinom_2 = Polynom(self.polinom2.get_polinom())
+        answer = polinom_1.SUB_PP_P(polinom_2).get_coef()
+        for i in range(len(answer)):
+            if answer[i].denumerator.COM_NN_D(Natural('1')) == 0:
+                answer[i] = Integer(str(answer[i]).split('/')[0])
+        answer_polinom = Polinom_interface(len(answer) - 1)
+        answer_polinom.input_polinom(answer)
+        self.answer_1.setText(str(answer_polinom))
 
     def multiplication_by_ration_number_res(self):
         answer = 'Answer'
@@ -1507,53 +1539,167 @@ class Polinoms(QWidget):
                 (''.join(self.denominator_2.text().split('-')).isdigit() and int(self.denominator_2.text()) == 0):
             self.answer_2.setText('Введите корректное значение знаменателя')
             return
-        self.answer_2.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        ratio = Rational(self.numerator_2.text(), self.denominator_2.text())
+        answer = polinom_1.MUL_PQ_P(ratio)
+        answer = answer.get_coef()
+        for i in range(len(answer)):
+            if answer[i].denumerator.COM_NN_D(Natural('1')) == 0:
+                answer[i] = Integer(str(answer[i]).split('/')[0])
+        answer_polinom = Polinom_interface(len(answer) - 1)
+        answer_polinom.input_polinom(answer)
+        self.answer_2.setText(str(answer_polinom))
 
     def multiplication_by_x_res(self):
-        answer = 'Answer'
-        self.answer_3.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        k = int(self.num_3.text())
+        answer = polinom_1.MUL_Pxk_P(k)
+        answer = answer.get_coef()
+        for i in range(len(answer)):
+            if answer[i].denumerator.COM_NN_D(Natural('1')) == 0:
+                answer[i] = Integer(str(answer[i]).split('/')[0])
+        answer_polinom = Polinom_interface(len(answer) - 1)
+        answer_polinom.input_polinom(answer)
+        self.answer_3.setText(str(answer_polinom))
 
     def leading_coefficient_res(self):
-        answer = 'Answer'
-        self.answer_4.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        print(polinom_1)
+        answer = polinom_1.LED_P_Q()
+        if answer.denumerator.COM_NN_D(Natural('1')) == 0:
+            answer = answer.numerator
+        self.answer_4.setText(str(answer))
 
     def degree_res(self):
-        answer = 'Answer'
-        self.answer_5.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        answer = polinom_1.DEG_P_N()
+        self.answer_5.setText(str(answer))
 
     def NOK_NOD_res(self):
-        answer = 'Answer'
-        self.answer_6.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        answer = polinom_1.FAC_P_Q()
+        self.answer_6.setText(str(answer).split('/')[0])
 
     def multiplication_res(self):
-        answer = 'Answer'
-        self.answer_7.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print('vvvvvvvvvv')
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        polinom_2 = Polynom(self.polinom2.get_polinom())
+        answer = polinom_1.MUL_PP_P(polinom_2)
+        answer = answer.get_coef()
+        for i in range(len(answer)):
+            if answer[i].denumerator.COM_NN_D(Natural('1')) == 0:
+                answer[i] = Integer(str(answer[i]).split('/')[0])
+        answer_polinom = Polinom_interface(len(answer) - 1)
+        answer_polinom.input_polinom(answer)
+        self.answer_7.setText(str(answer_polinom))
 
     def quotient_of_division_res(self):
-        answer = 'Answer'
         if self.pol2_8.text() == '0' or self.pol2_8.text() == '':
-            self.answer_8.setText('Знаменатеьль не может быть нулём')
+            self.answer_8.setText('Знаменатель не может быть нулём')
             return
-        self.answer_8.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print('vvvvvvvvvv')
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        polinom_2 = Polynom(self.polinom2.get_polinom())
+        answer = polinom_1.DIV_PP_P(polinom_2)
+        answer = answer.get_coef()
+        for i in range(len(answer)):
+            if answer[i].denumerator.COM_NN_D(Natural('1')) == 0:
+                answer[i] = Integer(str(answer[i]).split('/')[0])
+        answer_polinom = Polinom_interface(len(answer) - 1)
+        answer_polinom.input_polinom(answer)
+        self.answer_8.setText(str(answer_polinom))
 
     def remainder_of_division_res(self):
-        answer = 'Answer'
         if self.pol2_9.text() == '0' or self.pol2_9.text() == '':
-            self.answer_9.setText('Знаменатеьль не может быть нулём')
+            self.answer_9.setText('Знаменатель не может быть нулём')
             return
-        self.answer_9.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print('vvvvvvvvvv')
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        polinom_2 = Polynom(self.polinom2.get_polinom())
+        answer = polinom_1.MOD_PP_P(polinom_2)
+        answer = answer.get_coef()
+        for i in range(len(answer)):
+            if answer[i].denumerator.COM_NN_D(Natural('1')) == 0:
+                answer[i] = Integer(str(answer[i]).split('/')[0])
+        answer_polinom = Polinom_interface(len(answer) - 1)
+        answer_polinom.input_polinom(answer)
+        self.answer_9.setText(str(answer_polinom))
 
     def NOD_res(self):
-        answer = 'Answer'
-        self.answer_10.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print('vvvvvvvvvv')
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        polinom_2 = Polynom(self.polinom2.get_polinom())
+        answer = polinom_1.GCF_PP_P(polinom_2)
+        answer = answer.get_coef()
+        for i in range(len(answer)):
+            if answer[i].denumerator.COM_NN_D(Natural('1')) == 0:
+                answer[i] = Integer(str(answer[i]).split('/')[0])
+        answer_polinom = Polinom_interface(len(answer) - 1)
+        answer_polinom.input_polinom(answer)
+        self.answer_10.setText(str(answer_polinom))
 
     def derivative_res(self):
-        answer = 'Answer'
-        self.answer_11.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        answer = polinom_1.DER_P_P()
+        answer = answer.get_coef()
+        for i in range(len(answer)):
+            if '/1' in str(answer[i]):
+                answer[i] = Integer(str(answer[i]).split('/')[0])
+        answer_polinom = Polinom_interface(len(answer) - 1)
+        answer_polinom.input_polinom(answer)
+        self.answer_11.setText(str(answer_polinom))
 
     def conversion_res(self):
-        answer = 'Answer'
-        self.answer_12.setText(answer)
+        for el in self.polinom.get_polinom():
+            print(str(el), end='\t')
+        print()
+        polinom_1 = Polynom(self.polinom.get_polinom())
+        answer = polinom_1.NMR_P_P()
+        answer = answer.get_coef()
+        for i in range(len(answer)):
+            if '/1' in str(answer[i]):
+                answer[i] = Integer(str(answer[i]).split('/')[0])
+        answer_polinom = Polinom_interface(len(answer) - 1)
+        answer_polinom.input_polinom(answer)
+        self.answer_12.setText(str(answer_polinom))
 
     def addition_ui(self):
         layout = QFormLayout()
@@ -1790,27 +1936,32 @@ class Polinoms(QWidget):
         self.label.setText(self.labels[self.Stack.currentIndex()])
 
 
-class Polinom():
+class Polinom_interface():
     def __init__(self, m=0):
         if m < 0:
             m = 0
-        self.polinom = [0] * (m + 1)
+        self.polinom = [Integer('0')] * (m + 1)
         self.degree = m
 
     def __str__(self):
         line = []
         for i in range(self.degree, 0, -1):
-            if self.polinom[i] == 1:
+            if str(self.polinom[i]) == '1':
                 if i != 1:
                     line.append(f"x^{i}")
                 else:
                     line.append(f"x")
-            elif self.polinom[i] != 0:
+            elif str(self.polinom[i]) == '-1':
                 if i != 1:
-                    line.append(f"{self.polinom[i]}x^{i}")
+                    line.append(f"-x^{i}")
                 else:
-                    line.append(f"{self.polinom[i]}x")
-        if self.polinom[0] != 0:
+                    line.append(f"-x")
+            elif str(self.polinom[i]) != '0':
+                if i != 1:
+                    line.append(f"{str(self.polinom[i])}x^{i}")
+                else:
+                    line.append(f"{str(self.polinom[i])}x")
+        if str(self.polinom[0]) != '0':
             line.append(str(self.polinom[0]))
         line = ' + '.join(line)
         if line == '':
@@ -1819,27 +1970,33 @@ class Polinom():
 
     def str_to_polinom(self, line):
         st = ''.join(line.split())
-        sign = ['^', 'x', '-', '+']
+        sign = ['^', 'x', '-', '+', '.', '/']
         for el in sign:
             st = ''.join(st.split(el))
         if line == '' or not(st.isdigit()):
             line = '0'
+        if f"x^{self.degree}" not in line:
+            self.change_size(0)
+        line = ' + -'.join(line.split('-'))
         line = line.split('+')
         line = [el.split('x^') for el in line]
         for i in range(self.degree + 1):
-            self.polinom[i] = 0
+            self.polinom[i] = Integer('0')
         for el in line:
             if len(el) > 1 and len(el[1]) > 0:
-                if el[0] == '':
-                    el[0] = '0'
+                el[0] = ''.join(el[0].split())
+                if el[0] == '' or el[0] == ' ':
+                    el[0] = '1'
                 elif el[0] == '-':
                     el[0] = '-1'
                 if int(el[1]) > self.degree:
                     self.change_size(int(el[1]))
-                if '.' in el[0]:
-                    self.change(int(el[1]), float(el[0]))
+                if '/' in el[0]:
+                    parts = el[0].split('/')
+                    rat = Rational(parts[0], parts[1])
+                    self.change(int(el[1]), rat)
                 else:
-                    self.change(int(el[1]), int(el[0]))
+                    self.change(int(el[1]), Integer(el[0]))
             else:
                 if len(el[0]) > 0:
                     el[0] = ''.join(el[0].split())
@@ -1848,10 +2005,12 @@ class Polinom():
                     elif el[0] == '-':
                         el[0] = '-1'
                     if 'x' not in el[0]:
-                        if '.' in el[0]:
-                            self.change(0, float(el[0]))
+                        if '/' in el[0]:
+                            parts = el[0].split('/')
+                            rat = Rational(parts[0], parts[1])
+                            self.change(0, rat)
                         else:
-                            self.change(0, int(el[0]))
+                            self.change(0, Integer(el[0]))
                     else:
                         if self.degree < 1:
                             self.change_size(1)
@@ -1860,10 +2019,15 @@ class Polinom():
                             m = '1'
                         elif m == '-':
                             m = '-1'
-                        if '.' in m:
-                            self.change(1, float(m))
+                        if '/' in m:
+                            parts = m.split('/')
+                            self.change(1, Rational(parts[0], parts[1]))
                         else:
-                            self.change(1, int(m))
+                            self.change(1, Integer(m))
+
+    def input_polinom(self, coef):
+        for i in range(len(self.polinom)):
+            self.change(i, coef[i])
 
     def get_polinom(self):
         return self.polinom
@@ -1882,7 +2046,7 @@ class Polinom():
             return
         if (len(self.polinom) - 1) < n:
             while (len(self.polinom) - 1) < n:
-                self.polinom.append(0)
+                self.polinom.append(Integer('0'))
         else:
             while (len(self.polinom) - 1) > n:
                 del self.polinom[-1]
@@ -1930,27 +2094,28 @@ class Input_polinom(QDialog):
         pol = [el for el in self.polinom.get_polinom()]
         if text != '':
             if text.isdigit() or (text[0] == '-' and text[1:].isdigit()):
-                pol[m] = int(text)
-            elif ''.join(text.split('.')).isdigit() or (text[0] and ''.join(text.split('.'))[1:].isdigit()):
-                pol[m] = float(text)
+                pol[m] = Integer(text)
+            elif ''.join(text.split('/')).isdigit() or (text[0] and ''.join(text.split('/'))[1:].isdigit()):
+                parts = text.split('/')
+                pol[m] = Rational(parts[0], parts[1])
             elif text == '-':
-                pol[m] = -1
+                pol[m] = Integer('-1')
         else:
-            if self.polinom.get_polinom()[m] == 0:
-                pol[m] = 0
+            if str(self.polinom.get_polinom()[m]) == '0':
+                pol[m] = Integer('0')
         line = []
         for i in range(self.degree_of_polinom, 0, -1):
-            if pol[i] == 1:
+            if str(pol[i]) == '1':
                 if i != 1:
                     line.append(f"x^{i}")
                 else:
                     line.append(f"x")
-            elif pol[i] != 0:
+            elif str(pol[i]) != '0':
                 if i != 1:
-                    line.append(f"{pol[i]}x^{i}")
+                    line.append(f"{str(pol[i])}x^{i}")
                 else:
-                    line.append(f"{pol[i]}x")
-        if pol[0] != 0:
+                    line.append(f"{str(pol[i])}x")
+        if str(pol[0]) != '0':
             line.append(str(pol[0]))
         line = ' + '.join(line)
         self.polinom_label.setText(line)
@@ -1968,10 +2133,11 @@ class Input_polinom(QDialog):
         if self.coef.text() == '':
             return
         if self.coef.text().isdigit() or (self.coef.text()[0] == '-' and self.coef.text()[1:].isdigit()):
-            self.polinom.change(m, int(self.coef.text()))
-        elif ''.join(self.coef.text().split('.')).isdigit() or\
-                (self.coef.text()[0] == '-' and ''.join(self.coef.text().split('.'))[1:].isdigit()):
-            self.polinom.change(m, float(self.coef.text()))
+            self.polinom.change(m, Integer(self.coef.text()))
+        elif ''.join(self.coef.text().split('/')).isdigit() or\
+                (self.coef.text()[0] == '-' and ''.join(self.coef.text().split('/'))[1:].isdigit()):
+            parts = self.coef.text().split('/')
+            self.polinom.change(m, Rational(parts[0], parts[1]))
 
     def end(self):
         self.save_polinom()
